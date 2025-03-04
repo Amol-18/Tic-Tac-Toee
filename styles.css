@@ -199,6 +199,7 @@ body.dark-mode .cell:hover {
   transition: transform 0.2s;
   width: 100%;
   max-width: 200px;
+  margin: 20px auto 0; /* Center and add margin to move it down */
 }
 
 .reset-btn:hover {
