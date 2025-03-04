@@ -10,13 +10,13 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
   transition: background 0.3s, color 0.3s;
   padding: 20px;
 }
 
 body.dark-mode {
-  background: linear-gradient(135deg, #2c3e50, #34495e);
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
   color: #fff;
 }
 
@@ -32,7 +32,7 @@ body.dark-mode {
 }
 
 body.dark-mode .container {
-  background-color: #2c3e50;
+  background-color: #1e1e2f;
   color: #fff;
 }
 
@@ -41,7 +41,7 @@ h1 {
   color: #333;
   font-size: 2.5rem;
   font-weight: 600;
-  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -58,7 +58,7 @@ body.dark-mode h1 {
 
 #themeBtn {
   padding: 10px 20px;
-  background: linear-gradient(135deg, #007bff, #0056b3);
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
   color: #fff;
   border: none;
   border-radius: 25px;
@@ -87,13 +87,13 @@ body.dark-mode h1 {
 }
 
 .player-names input:focus {
-  border-color: #007bff;
+  border-color: #6a11cb;
   outline: none;
 }
 
 #startBtn {
   padding: 10px 20px;
-  background: linear-gradient(135deg, #007bff, #0056b3);
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
   color: #fff;
   border: none;
   border-radius: 25px;
@@ -160,7 +160,7 @@ body.dark-mode .scoreboard {
 }
 
 body.dark-mode .cell {
-  background-color: #34495e;
+  background-color: #2a2a40;
   color: #fff;
 }
 
@@ -170,7 +170,7 @@ body.dark-mode .cell {
 }
 
 body.dark-mode .cell:hover {
-  background-color: #2c3e50;
+  background-color: #3a3a5a;
 }
 
 .cell.winner {
@@ -192,7 +192,7 @@ body.dark-mode .cell:hover {
   padding: 10px 20px;
   font-size: 0.9rem;
   color: #fff;
-  background: linear-gradient(135deg, #007bff, #0056b3);
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
   border: none;
   border-radius: 25px;
   cursor: pointer;
