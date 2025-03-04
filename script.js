@@ -1,117 +1,217 @@
-const cells = document.querySelectorAll('.cell');
-const statusText = document.querySelector('.status');
-const resetBtn = document.querySelector('.reset-btn');
-const playerXInput = document.getElementById('playerX');
-const playerOInput = document.getElementById('playerO');
-const startBtn = document.getElementById('startBtn');
-const themeBtn = document.getElementById('themeBtn');
-const clickSound = document.getElementById('clickSound');
-const winSound = document.getElementById('winSound');
-const drawSound = document.getElementById('drawSound');
-
-let currentPlayer = 'X';
-let gameActive = true;
-let gameState = ['', '', '', '', '', '', '', '', ''];
-let scoreX = 0;
-let scoreO = 0;
-let playerXName = 'Player X';
-let playerOName = 'Player O';
-
-const winningConditions = [
-  [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
-  [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
-  [0, 4, 8], [2, 4, 6] // Diagonals
-];
-
-// Confetti Animation
-const confettiSettings = { target: 'confetti' };
-const confetti = new ConfettiGenerator(confettiSettings);
-
-// Theme Toggle
-themeBtn.addEventListener('click', () => {
-  document.body.classList.toggle('dark-mode');
-  themeBtn.textContent = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
-});
-
-// Start Game
-startBtn.addEventListener('click', () => {
-  playerXName = playerXInput.value || 'Player X';
-  playerOName = playerOInput.value || 'Player O';
-  statusText.textContent = `${playerXName}'s Turn`;
-  document.querySelector('.player-names').style.display = 'none';
-});
-
-// Handle Cell Click
-function handleCellClick(event) {
-  const clickedCell = event.target;
-  const clickedCellIndex = parseInt(clickedCell.getAttribute('data-index'));
-
-  if (gameState[clickedCellIndex] !== '' || !gameActive) return;
-
-  gameState[clickedCellIndex] = currentPlayer;
-  clickedCell.textContent = currentPlayer;
-  clickSound.play();
-
-  checkForWinner();
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
 }
 
-// Check for Winner
-function checkForWinner() {
-  let roundWon = false;
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  transition: background 0.3s, color 0.3s;
+  padding: 20px;
+}
 
-  for (let condition of winningConditions) {
-    const [a, b, c] = condition;
-    if (gameState[a] === '' || gameState[b] === '' || gameState[c] === '') continue;
+body.dark-mode {
+  background: linear-gradient(135deg, #2c3e50, #34495e);
+  color: #fff;
+}
 
-    if (gameState[a] === gameState[b] && gameState[b] === gameState[c]) {
-      roundWon = true;
-      cells[a].classList.add('winner');
-      cells[b].classList.add('winner');
-      cells[c].classList.add('winner');
-      winSound.play();
-      confetti.render();
-      break;
-    }
+.container {
+  text-align: center;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s, color 0.3s;
+  width: 100%;
+  max-width: 400px;
+}
+
+body.dark-mode .container {
+  background-color: #2c3e50;
+  color: #fff;
+}
+
+h1 {
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 2rem;
+}
+
+body.dark-mode h1 {
+  color: #fff;
+}
+
+.theme-toggle {
+  margin-bottom: 20px;
+}
+
+#themeBtn {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+#themeBtn:hover {
+  background-color: #0056b3;
+}
+
+.player-names {
+  margin-bottom: 20px;
+}
+
+.player-names input {
+  padding: 10px;
+  margin: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+  max-width: 200px;
+  font-size: 0.9rem;
+}
+
+#startBtn {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-top: 10px;
+}
+
+#startBtn:hover {
+  background-color: #0056b3;
+}
+
+.status {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  color: #555;
+  font-weight: bold;
+}
+
+body.dark-mode .status {
+  color: #fff;
+}
+
+.scoreboard {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  font-size: 1rem;
+  color: #555;
+}
+
+body.dark-mode .scoreboard {
+  color: #fff;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0;
+  border-radius: 15px;
+  font-size: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  aspect-ratio: 1 / 1; /* Ensure cells are square */
+}
+
+body.dark-mode .cell {
+  background-color: #34495e;
+  color: #fff;
+}
+
+.cell:hover {
+  background-color: #e0e0e0;
+}
+
+body.dark-mode .cell:hover {
+  background-color: #2c3e50;
+}
+
+.cell.winner {
+  background-color: #4caf50;
+  color: white;
+  animation: bounce 0.5s ease-in-out;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+.reset-btn {
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  width: 100%;
+  max-width: 200px;
+}
+
+.reset-btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.footer {
+  margin-top: 20px;
+  font-size: 0.8rem;
+  color: #777;
+}
+
+body.dark-mode .footer {
+  color: #fff;
+}
+
+/* Mobile-Specific Adjustments */
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.5rem;
   }
 
-  if (roundWon) {
-    statusText.textContent = `${currentPlayer === 'X' ? playerXName : playerOName} Wins! 🎉`;
-    if (currentPlayer === 'X') scoreX++;
-    else scoreO++;
-    updateScore();
-    gameActive = false;
-    return;
+  .status {
+    font-size: 1rem;
   }
 
-  if (!gameState.includes('')) {
-    statusText.textContent = "It's a Draw! 🤝";
-    drawSound.play();
-    gameActive = false;
-    return;
+  .cell {
+    font-size: 1.5rem;
   }
 
-  currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-  statusText.textContent = `${currentPlayer === 'X' ? playerXName : playerOName}'s Turn`;
-}
+  .reset-btn {
+    font-size: 0.8rem;
+  }
 
-// Update Score
-function updateScore() {
-  document.getElementById('scoreX').textContent = scoreX;
-  document.getElementById('scoreO').textContent = scoreO;
+  .footer {
+    font-size: 0.7rem;
+  }
 }
-
-// Reset Game
-function resetGame() {
-  gameState = ['', '', '', '', '', '', '', '', ''];
-  gameActive = true;
-  currentPlayer = 'X';
-  statusText.textContent = `${playerXName}'s Turn`;
-  cells.forEach(cell => {
-    cell.textContent = '';
-    cell.classList.remove('winner');
-  });
-  confetti.clear();
-}
-
-cells.forEach(cell => cell.addEventListener('click', handleCellClick));
-resetBtn.addEventListener('click', resetGame);
